@@ -77,8 +77,8 @@ streamlit run app.py
 
 ## Deploy linkek
 
-* **Frontend (Streamlit Cloud):** [itt add meg a linket]
-* **Backend (Render):** [itt add meg a linket]
+* **Frontend (Streamlit Cloud):** [[itt add meg a linket](https://realmultiparadigma.streamlit.app)]
+* **Backend (Render):** [[itt add meg a linket](https://movie-project-58bs.onrender.com)]
 
 ---
 
