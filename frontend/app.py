@@ -11,6 +11,12 @@ st.title("Movie Database")
 st.header("Search Movie (OMDb)")
 search_title = st.text_input("Enter movie title:")
 
+if 'movies' not in st.session_state:
+    # alapértelmezett lekérés
+    response = requests.get(f"{BACKEND_URL}/movies")
+    st.session_state.movies = response.json() if response.ok else []
+
+# --- Keresés és hozzáadás ---
 if st.button("Search"):
     if search_title:
         response = requests.get(f"{BACKEND_URL}/search", params={"title": search_title})
@@ -22,38 +28,26 @@ if st.button("Search"):
             st.write("Movie found:")
             st.json(data)
 
-            # --- Hozzáadás az adatbázishoz ---
             if st.button("Add to DB"):
                 post_resp = requests.post(f"{BACKEND_URL}/search_and_add", params={"title": search_title})
-                if post_resp.status_code == 200:
+                if post_resp.ok:
                     st.success(f"Added: {post_resp.json()['title']}")
-                    
-                    # --- Frissítjük a "All Movies" listát ---
-                    all_movies_resp = requests.get(f"{BACKEND_URL}/movies")
-                    movies = all_movies_resp.json()
-                    if movies:
-                        df = pd.DataFrame(movies)
-                        display_columns = ["title", "year", "genre", "director", "rating"]
-                        df = df[[col for col in display_columns if col in df.columns]]
-                        st.dataframe(df)
+                    # hozzáadjuk a session_state-hez, hogy azonnal látszódjon
+                    st.session_state.movies.append(post_resp.json())
                 else:
                     st.error("Failed to add movie")
 
-# --- Film lista --- (ha nem adtunk hozzá most)
+# --- Film lista ---
 st.header("All Movies")
-if 'movies' not in locals():  # ha még nem frissítettük a listát a hozzáadás után
-    response = requests.get(f"{BACKEND_URL}/movies")
-    movies = response.json()
-    if movies:
-        df = pd.DataFrame(movies)
-        display_columns = ["title", "year", "genre", "director", "rating"]
-        df = df[[col for col in display_columns if col in df.columns]]
-        st.dataframe(df)
-    else:
-        st.info("No movies in database yet.")
+if st.session_state.movies:
+    df = pd.DataFrame(st.session_state.movies)
+    display_columns = ["title", "year", "genre", "director", "rating"]
+    df = df[[col for col in display_columns if col in df.columns]]
+    st.dataframe(df)
 
-# --- Vizualizáció: rating diagram ---
-if movies:
+    # --- Vizualizáció ---
     if "rating" in df.columns:
         st.header("Ratings Chart")
         st.bar_chart(df.set_index("title")["rating"])
+else:
+    st.info("No movies in database yet.")
