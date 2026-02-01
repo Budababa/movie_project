@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 import os
 
-BACKEND_URL = os.getenv("BACKEND_URL")
+BACKEND_URL = os.getenv("BACKEND_URL", "https://movie-project-58bs.onrender.com")
 
 st.title("Movie Database")
 
