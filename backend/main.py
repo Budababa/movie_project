@@ -20,6 +20,11 @@ app.include_router(movie_router)
 # Background task
 start_background_task()
 
+@app.get("/")
+def read_root():
+    return {"message": "Movie backend is running!"}
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
