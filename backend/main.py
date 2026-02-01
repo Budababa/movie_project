@@ -5,6 +5,11 @@ from backend.api.movie_routes import router as movie_router
 from backend.db import engine, Base
 from backend.models.movie_model import Movie
 from backend.background.updater import start_background_task
+import os
+
+OMDB_API_KEY = os.getenv("OMDB_API_KEY")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./movies.db")
+
 
 app = FastAPI()
 
