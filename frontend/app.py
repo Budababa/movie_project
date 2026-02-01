@@ -1,8 +1,9 @@
 import streamlit as st
 import requests
 import pandas as pd
+import os
 
-BACKEND_URL = "http://127.0.0.1:8000"  # ha később deploy, cserélni kell a Render URL-re
+BACKEND_URL = os.getenv("BACKEND_URL", "https://movie-project-58bs.onrender.com")
 
 st.title("Movie Database")
 
