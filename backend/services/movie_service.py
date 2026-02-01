@@ -1,6 +1,10 @@
 from backend.db import SessionLocal
 from backend.models.movie_model import Movie
 from backend.schemas.movie_schema import MovieCreate
+import os
+
+OMDB_API_KEY = os.getenv("OMDB_API_KEY")
+
 
 class MovieService:
     def __init__(self):

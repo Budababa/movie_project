@@ -3,6 +3,7 @@ from backend.services.movie_service import MovieService
 from backend.schemas.movie_schema import MovieCreate, MovieRead
 from typing import List
 from backend.services.external_api import OMDbClient
+import os
 
 router = APIRouter()
 
